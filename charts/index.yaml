@@ -3,7 +3,7 @@ entries:
   cluster-setup:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-05-24T17:12:37.529805+01:00"
+    created: "2025-05-24T17:23:20.7354464+01:00"
     dependencies:
     - condition: argo-cd.enabled
       name: argo-cd
@@ -13,11 +13,13 @@ entries:
       name: cert-manager
       repository: https://charts.jetstack.io
       version: 1.17.2
-    description: A Helm chart for Kubernetes
-    digest: 6998fed5f80e02692deac0dfe19deade4dd9f28c1cd166d529b00605f31ae5d7
+    description: A Helm chart for Kubernetes to quickly setup necessary resources
+    digest: b605903930ba0afd8c8eb95195a917adbf06ac4ce92614d5ba4c2387f3db70d2
+    home: https://github.com/jamesw-xml/cluster-setup-helm-chart
+    icon: https://raw.githubusercontent.com/jamesw-xml/cluster-setup-helm-chart/main/profile.jpg
     name: cluster-setup
     type: application
     urls:
-    - https://jamesw-xml.github.io/cluster-setup-helm-chart/charts/cluster-setup-1.0.0.tgz
-    version: 1.0.0
-generated: "2025-05-24T17:12:37.5188052+01:00"
+    - https://jamesw-xml.github.io/cluster-setup-helm-chart/charts/cluster-setup-1.2.0.tgz
+    version: 1.2.0
+generated: "2025-05-24T17:23:20.7244463+01:00"
