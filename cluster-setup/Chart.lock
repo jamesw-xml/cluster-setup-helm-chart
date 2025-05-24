@@ -1,12 +1,12 @@
 dependencies:
 - name: argo-cd
-  repository: ""
+  repository: https://argoproj.github.io/argo-helm
   version: 8.0.9
 - name: cert-manager
   repository: https://charts.jetstack.io
   version: v1.17.2
-- name: kurrentdb-operator
-  repository: ""
-  version: 1.1.0
-digest: sha256:3f6ebf875d84c673dee3d53b7011e12e07ef8bde20858b63cdab4410cb0bafd6
-generated: "2025-05-24T13:45:02.6506816+01:00"
+- name: apisix-ingress-controller
+  repository: https://charts.apiseven.com
+  version: 0.14.0
+digest: sha256:91fd5638a6e74d6ed1d50c0a8aa55d6f62993b86b334ad958f05ea7f3afbc2bc
+generated: "2025-05-24T15:23:27.4346568+01:00"

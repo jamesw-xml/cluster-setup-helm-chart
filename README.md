@@ -10,9 +10,24 @@ This Helm chart provisions a Kubernetes environment with essential components fo
 
 The chart is designed to be deployed on any Kubernetes cluster, including local clusters created with [kind](https://kind.sigs.k8s.io/) and managed clusters such as Azure Kubernetes Service (AKS).
 
+Make sure your cluster has at least 16GB of resources, I have multiple nodes using this config
+
+```yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30000
+        hostPort: 30000
+  - role: worker
+  - role: worker
+```
+
 ## Usage
 
 1. Install the chart into your cluster (e.g., kind or AKS) using Helm:
 
    ```sh
-   helm install cluster-setup ./cluster-setup
+   helm dependency build
+   helm install cluster-setup ./cluster-setup -n default

@@ -125,6 +125,8 @@ affinity: {}
 
 argo-cd:
   enabled: true
+  crds:
+    keep: false
   controller:
     replicas: 1
   namespaceOverride: argocd
@@ -138,11 +140,16 @@ argo-cd:
 
 cert-manager:
   enabled: true
-  installCRDs: true
+  crds:
+    enabled: true
+    keep: false
   ingressShim:
     defaultIssuerName: letsencrypt-prod
     defaultIssuerKind: ClusterIssuer
 
+apisix:
+  enabled: true
+  namespace: ingress-apisix
 
 kurrentdb:
   enabled: true
