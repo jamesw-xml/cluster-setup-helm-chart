@@ -31,3 +31,5 @@ nodes:
    ```sh
    helm dependency build
    helm install cluster-setup ./cluster-setup -n default
+   ```
+   
