@@ -2,6 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Add extra secrets here if needed
+secrets: []
+  # - name: mysecret
+  #   type: Opaque
+  #   data:
+  #     EVENTSTORE_INSECURE: "true"  # Set to true to enable insecure mode for KurrentDB
+  #     EVENTSTORE_ADMIN_PASSWORD: "Y2hhbmdlYXQ="  # Base64 encoded 'changeit'
+
 storageClasses:
   - name: default
     provisioner: rancher.io/local-path
@@ -18,6 +26,11 @@ argo-cd:
     replicas: 1
   namespaceOverride: argocd
   fullnameOverride: argocd
+  configs:
+    cm:
+      exec.enabled: true
+    secret:
+      argocdServerAdminPassword: $2b$12$/A8aEgy54C65WT9oYmADQu9orYjK5J09nJfEg2UguuV9NBHcC5xQW # password defaults to admin
   server:
     insecure: true
     service:
@@ -123,17 +136,29 @@ kube-prometheus-stack:
                 requests:
                   storage: 10Gi
               storageClassName: default
-elasticsearch:
+elasticstack:
   enabled: true
   namespaceOverride: elasticsearch
-  applicationValues:
-    replicas: 1
-    minimumMasterNodes: 1
-    volumeClaimTemplate:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 30Gi
-      storageClassName: default
-    persistence:
-      enabled: true
+  persistence:
+    enabled: true
+    storageClass: default
+    accessModes: ["ReadWriteOnce"]
+    size: 30Gi
+  elasticsearch:
+    version: 7.17.7
+    nodesets:
+      - name: default
+        podTemplate:
+            spec:
+              containers:
+                - name: elasticsearch
+                  resources:
+                    requests:
+                      cpu: "500m"
+                      memory: "2Gi"
+                    limits:
+                      cpu: "1"
+                      memory: "4Gi"
+            
+  kibana:
+    version: 7.17.7

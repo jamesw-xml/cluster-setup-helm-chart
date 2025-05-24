@@ -1,4 +1,4 @@
-{{- if .Values.elasticsearch.enabled }}
+{{- if .Values.elasticstack.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -10,7 +10,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   destination:
-    namespace: {{ .Values.elasticsearch.namespaceOverride | default "elastic" }}
+    namespace: {{ .Values.elasticstack.namespaceOverride | default "elastic" }}
     server: https://kubernetes.default.svc
   project: default
   source:
@@ -19,11 +19,33 @@ spec:
     targetRevision: 0.15.0
     helm:
       values: |
-{{ toYaml .Values.elasticsearch.applicationValues | nindent 8 }}
+{{ toYaml (dict
+    "eck-elasticsearch" .Values.elasticstack.elasticsearch
+    "eck-kibana" .Values.elasticstack.kibana
+) | nindent 8 }}
   syncPolicy:
     automated:
       selfHeal: true
       prune: true
     syncOptions:
       - CreateNamespace=true
+{{- end }}
+
+{{- if .Values.elasticstack.persistence.enabled }}
+{{- range $i, $node := .Values.elasticstack.elasticsearch.nodesets }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elasticsearch-data-elasticsearch-es-{{ $node.name }}-{{ $i }}
+  namespace: {{ $.Values.elasticstack.namespaceOverride | default "elastic" }}
+spec:
+  accessModes:
+    - {{ $.Values.elasticstack.persistence.accessMode | default "ReadWriteOnce" }}
+  resources:
+    requests:
+      storage: {{ $.Values.elasticstack.persistence.size | default "30Gi" }}
+  storageClassName: {{ $.Values.elasticstack.persistence.storageClass | default "standard" }}
+
+{{- end }}
 {{- end }}

@@ -2,7 +2,7 @@ apiVersion: v2
 name: cluster-setup
 description: A Helm chart for Kubernetes to quickly setup necessary resources
 type: application
-version: 1.4.0
+version: 1.5.0
 icon: https://raw.githubusercontent.com/jamesw-xml/cluster-setup-helm-chart/refs/heads/main/main/profile.jpg
 home: https://github.com/jamesw-xml/cluster-setup-helm-chart
 appVersion: "1.16.0"
