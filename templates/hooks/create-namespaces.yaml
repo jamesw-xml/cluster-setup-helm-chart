@@ -18,13 +18,3 @@ metadata:
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation
 {{- end }}
-
-{{- if .Values.apisix.enabled }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.apisix.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation
-{{- end }}

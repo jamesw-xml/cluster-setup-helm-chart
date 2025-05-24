@@ -1,8 +1,7 @@
-{{- if .Values.apisix.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: create-apisix-application
+  name: create-argo-applications
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": post-install
@@ -24,8 +23,17 @@ spec:
                 echo "Still waiting..."
                 sleep 5
               done
+{{- if .Values.apisix.enabled }}              
               echo "Applying ArgoCD Application for APISIX..."
               cat <<EOF | kubectl apply -f -
 {{ tpl (include "cluster-setup.argoApisixApplication" .) . | indent 14 }}
               EOF
+              echo "ArgoCD Application for APISIX created successfully."
+{{- end }}
+{{- if (index .Values "kube-prometheus-stack").enabled }}              
+              echo "Applying ArgoCD Application for Kube prometheus stack..."
+              cat <<EOF | kubectl apply -f -
+{{ tpl (include "cluster-setup.argoPrometheusApplication" .) . | indent 14 }}
+              EOF
+              echo "ArgoCD Application for prometheus stack created successfully."
 {{- end }}

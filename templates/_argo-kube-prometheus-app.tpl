@@ -1,0 +1,26 @@
+{{- define "cluster-setup.argoPrometheusApplication" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+spec:
+  destination:
+    namespace: {{ (index .Values "kube-prometheus-stack").namespaceOverride | default "monitoring" }}
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 72.4.0
+    helm:
+      values: |
+{{ toYaml (index .Values "kube-prometheus-stack").applicationValues | nindent 8 }}
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+{{- end }}

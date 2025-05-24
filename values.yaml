@@ -122,6 +122,15 @@ tolerations: []
 
 affinity: {}
 
+#storageClasses: []
+
+storageClasses:
+  - name: default
+    provisioner: rancher.io/local-path
+    volumeBindingMode: WaitForFirstConsumer
+    reclaimPolicy: Retain
+    allowVolumeExpansion: true
+
 
 argo-cd:
   enabled: true
@@ -186,7 +195,7 @@ apisix:
       etcd:
         persistence:
           enabled: true
-          storageClass: standard
+          storageClass: default
           size: 10Gi
           accessModes:
             - ReadWriteOnce
@@ -209,7 +218,30 @@ kurrentdb:
   pvc:
     name: pvc-eventstore
     storage: 20Gi
-    storageClassName: standard
+    storageClassName: default
   secretName: mysecret
   adminPasswordKey: changeit
 
+
+kube-prometheus-stack:
+  enabled: true
+  namespaceOverride: monitoring
+  applicationValues:
+    namespaceOverride: monitoring
+    grafana:
+      persistence: 
+        enabled: true
+        storageClassName: default
+        accessModes:
+          - ReadWriteOnce
+        size: 10Gi
+    prometheus:
+      prometheusSpec:
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
+              storageClassName: default
