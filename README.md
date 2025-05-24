@@ -29,7 +29,7 @@ nodes:
 1. Install the chart into your cluster (e.g., kind or AKS) using Helm:
 
    ```sh
-   helm dependency build
-   helm install cluster-setup ./cluster-setup -n default
+    helm repo add cluster-setup https://jamesw-xml.github.io/<repo-name>/charts
+    helm repo update
+    helm install cluster-setup
    ```
-   
