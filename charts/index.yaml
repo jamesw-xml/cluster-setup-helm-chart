@@ -16,7 +16,7 @@ entries:
     description: A Helm chart for Kubernetes to quickly setup necessary resources
     digest: b605903930ba0afd8c8eb95195a917adbf06ac4ce92614d5ba4c2387f3db70d2
     home: https://github.com/jamesw-xml/cluster-setup-helm-chart
-    icon: https://raw.githubusercontent.com/jamesw-xml/cluster-setup-helm-chart/main/profile.jpg
+    icon: https://raw.githubusercontent.com/jamesw-xml/cluster-setup-helm-chart/refs/heads/main/main/profile.jpg
     name: cluster-setup
     type: application
     urls:
