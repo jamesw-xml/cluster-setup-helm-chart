@@ -13,9 +13,5 @@ dependencies:
     version: 1.17.2
     repository: https://charts.jetstack.io
     condition: cert-manager.enabled
-  - name: apisix-ingress-controller
-    version: 0.14.0
-    repository: https://charts.apiseven.com
-    condition: apisix.enabled
 
 

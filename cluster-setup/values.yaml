@@ -150,6 +150,46 @@ cert-manager:
 apisix:
   enabled: true
   namespace: ingress-apisix
+  namespaceOverride: ingress-apisix
+  applicationValues:
+      apisix:
+        enabled: true
+        prometheus:
+          enabled: true
+        ssl:
+          enabled: true
+      service:
+        type: LoadBalancer
+        # annotations:
+        #   service.beta.kubernetes.io/azure-load-balancer-internal: "true"        
+        #   service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "subnet-dev-spoke04"        
+        # loadBalancerIp: 10.43.0.10
+      gateway:
+        type: LoadBalancer
+        tls:
+          enabled: true
+          servicePort: 443
+          containerPort: 9443
+
+      admin:
+        enabled: true
+
+      dashboard:
+        enabled: true
+
+      ingress-controller:
+        enabled: true
+        config:
+          apisix:
+            serviceNamespace: ingress-apisix
+            adminAPIVersion: "v3"
+      etcd:
+        persistence:
+          enabled: true
+          storageClass: standard
+          size: 10Gi
+          accessModes:
+            - ReadWriteOnce
 
 kurrentdb:
   enabled: true

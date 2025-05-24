@@ -5,8 +5,5 @@ dependencies:
 - name: cert-manager
   repository: https://charts.jetstack.io
   version: v1.17.2
-- name: apisix-ingress-controller
-  repository: https://charts.apiseven.com
-  version: 0.14.0
-digest: sha256:91fd5638a6e74d6ed1d50c0a8aa55d6f62993b86b334ad958f05ea7f3afbc2bc
-generated: "2025-05-24T15:23:27.4346568+01:00"
+digest: sha256:281304f045b3d36d12b1ca03aec669dda99533b33ffa897bcfb062e844e844fa
+generated: "2025-05-24T15:40:48.6622953+01:00"

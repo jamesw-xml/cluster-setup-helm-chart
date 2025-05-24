@@ -1,0 +1,31 @@
+{{- if .Values.apisix.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-apisix-application
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: argo-app-installer
+      restartPolicy: OnFailure
+      containers:
+        - name: create-argo-app
+          image: bitnami/kubectl:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waiting for ArgoCD to be available..."
+              until kubectl wait --for=condition=available deployment/argocd-server -n argocd --timeout=120s; do
+                echo "Still waiting..."
+                sleep 5
+              done
+              echo "Applying ArgoCD Application for APISIX..."
+              cat <<EOF | kubectl apply -f -
+{{ tpl (include "cluster-setup.argoApisixApplication" .) . | indent 14 }}
+              EOF
+{{- end }}
