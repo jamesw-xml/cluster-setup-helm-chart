@@ -1,9 +1,13 @@
-{{- define "cluster-setup.argoPrometheusApplication" }}
+{{- if (index .Values "kube-prometheus-stack").enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kube-prometheus-stack
   namespace: argocd
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   destination:
     namespace: {{ (index .Values "kube-prometheus-stack").namespaceOverride | default "monitoring" }}
