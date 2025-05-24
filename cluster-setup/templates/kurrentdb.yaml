@@ -1,0 +1,93 @@
+{{- if .Values.kurrentdb.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.kurrentdb.pvc.name }}
+  namespace: {{ .Values.kurrentdb.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.kurrentdb.pvc.storage }}
+  storageClassName: {{ .Values.kurrentdb.pvc.storageClassName }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kurrentdb
+  namespace: {{ .Values.kurrentdb.namespace }}
+  labels:
+    app: kurrentdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kurrentdb
+  template:
+    metadata:
+        labels:
+            app: kurrentdb
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: kurrentdb
+          image: "{{ .Values.kurrentdb.image.repository }}:{{ .Values.kurrentdb.image.tag }}"
+          imagePullPolicy: {{ .Values.kurrentdb.image.pullPolicy }}
+          ports:
+            - containerPort: 1113
+            - containerPort: 2113
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          env:
+            - name: EVENTSTORE_CLUSTER_SIZE
+              value: "1"
+            - name: EVENTSTORE_RUN_PROJECTIONS
+              value: "None"
+            - name: EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP
+              value: "true"
+            - name: EVENTSTORE_ALLOW_UNKNOWN_OPTIONS
+              value: "true"
+            - name: EVENTSTORE_INSECURE
+              value: {{ .Values.kurrentdb.insecure | quote }}
+            {{- if not .Values.kurrentdb.insecure }}
+            - name: EVENTSTORE_CERTIFICATE_FILE
+              value: /certs/tls.crt
+            - name: EVENTSTORE_CERTIFICATE_PRIVATE_KEY_FILE
+              value: /certs/tls.key
+            - name: EVENTSTORE_TRUSTED_ROOT_CERTIFICATES_PATH
+              value: /etc/ssl/certs
+            - name: KURRENTDB_DEFAULT_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.kurrentdb.secretName }}
+                  key: {{ .Values.kurrentdb.adminPasswordKey }}
+            - name: EVENTSTORE_DEFAULT_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.kurrentdb.secretName }}
+                  key: {{ .Values.kurrentdb.adminPasswordKey }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.kurrentdb.resources | nindent 12 }}
+          volumeMounts:
+            - name: data-volume
+              mountPath: /var/lib/kurrentdb
+            {{- if not .Values.kurrentdb.insecure }}
+            - name: certs
+              mountPath: /certs
+              readOnly: false
+            {{- end }}
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.kurrentdb.pvc.name }}
+        {{- if not .Values.kurrentdb.insecure }}
+        
+        - name: certs
+          secret:
+            secretName: eventstore-grpc
+        {{- end }}
+{{- end }}

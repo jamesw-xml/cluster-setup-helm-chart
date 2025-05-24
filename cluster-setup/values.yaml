@@ -143,10 +143,26 @@ cert-manager:
     defaultIssuerName: letsencrypt-prod
     defaultIssuerKind: ClusterIssuer
 
+
 kurrentdb:
   enabled: true
   namespace: kurrentdb
-  operator:
-    replicas: 1
-    image:
-      tag: "1.1.0"
+  image:
+    repository: docker.kurrent.io/kurrent-latest/kurrentdb
+    tag: latest
+    pullPolicy: IfNotPresent
+  insecure: true  # set to true to enable EVENTSTORE_INSECURE
+  resources:
+    requests:
+      cpu: "400m"
+      memory: "2Gi"
+    limits:
+      cpu: "500m"
+      memory: "3Gi"
+  pvc:
+    name: pvc-eventstore
+    storage: 20Gi
+    storageClassName: standard
+  secretName: mysecret
+  adminPasswordKey: changeit
+
