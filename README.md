@@ -1,5 +1,7 @@
 # cluster-setup Helm Chart
 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cluster-setup)](https://artifacthub.io/packages/search?repo=cluster-setup)
+
 This Helm chart provisions a Kubernetes environment with essential components for modern cloud-native workloads. It includes:
 
 - **Argo CD** for GitOps-based continuous delivery and application management.
