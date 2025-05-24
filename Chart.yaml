@@ -1,8 +1,10 @@
 apiVersion: v2
 name: cluster-setup
-description: A Helm chart for Kubernetes
+description: A Helm chart for Kubernetes to quickly setup necessary resources
 type: application
-version: 1.0.0
+version: 1.2.0
+icon: https://raw.githubusercontent.com/jamesw-xml/cluster-setup-helm-chart/main/profile.jpg
+home: https://github.com/jamesw-xml/cluster-setup-helm-chart
 appVersion: "1.16.0"
 dependencies:
   - name: argo-cd
